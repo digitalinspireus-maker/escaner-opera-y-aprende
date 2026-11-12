@@ -1,0 +1,1101 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Escáner Opera y Aprende</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#F3F4F5; --paper2:#ECEEF0; --surface:#FFFFFF; --surface2:#F7F8F9;
+  --ink:#12181F; --ink2:#3C4652; --muted:#6E7A87;
+  --teal:#0B5C46; --teal-deep:#084C3A; --teal-soft:#E2EEE9;
+  --coral:#B23A2E; --coral-deep:#9C2F24; --coral-soft:#F6E9E6;
+  --sun:#8A6D1F; --sun-soft:#F2ECDB;
+  --line:#DDE2E7; --line2:#C2CBD3;
+  --up:#0B7A4B; --down:#B23A2E;
+  --shadow:0 1px 3px rgba(18,24,31,.07);
+  --shadow-lg:0 16px 40px rgba(18,24,31,.13);
+  --r-lg:14px; --r-md:10px; --r-sm:8px;
+  --topbar-h:60px; --tabbar-h:62px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#0B0F13; --paper2:#10161C; --surface:#141B22; --surface2:#10161C;
+    --ink:#E9EDEF; --ink2:#B9C2CB; --muted:#8593A0;
+    --teal:#35B08C; --teal-deep:#7CD3B8; --teal-soft:#122B24;
+    --coral:#E0685C; --coral-deep:#EE9A90; --coral-soft:#2E1B17;
+    --sun:#D9B45C; --sun-soft:#2A2410;
+    --line:#232E38; --line2:#31404D;
+    --up:#3FB27F; --down:#E0685C;
+    --shadow:0 1px 3px rgba(0,0,0,.4);
+    --shadow-lg:0 16px 40px rgba(0,0,0,.5);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+}
+@media (min-width:900px){ body{padding-bottom:0} }
+h1,h2,h3,.disp{font-family:"Archivo","IBM Plex Sans",sans-serif; line-height:1.15; letter-spacing:-.015em; margin:0; font-weight:700}
+p{margin:0}
+a{color:var(--teal-deep); font-weight:600}
+img{max-width:100%; display:block}
+button{font-family:inherit; cursor:pointer}
+:focus-visible{outline:2px solid var(--teal); outline-offset:2px; border-radius:4px}
+.wrap{max-width:1120px; margin:0 auto; padding:0 18px}
+@media (min-width:900px){ .wrap{padding:0 28px} }
+
+/* ---------- Top menu ---------- */
+.topbar{
+  position:sticky; top:0; z-index:50; height:var(--topbar-h);
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{max-width:1120px; margin:0 auto; padding:0 18px; height:100%; display:flex; align-items:center; gap:14px}
+@media (min-width:900px){ .topbar-in{padding:0 28px} }
+.brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); min-height:44px}
+.brand-mark{width:38px; height:38px; flex:none; border-radius:9px; background:#12181F; border:1px solid var(--line2); display:grid; place-items:center}
+/* Logo: velitas japonesas animadas */
+.candle-logo .cl-c{transform-box:fill-box; transform-origin:50% 100%; animation:clBob 2.6s ease-in-out infinite}
+.candle-logo .cl-c2{animation-duration:2s; animation-delay:.4s}
+.candle-logo .cl-c3{animation-duration:3s; animation-delay:.8s}
+@keyframes clBob{0%,100%{transform:translateY(0) scaleY(1)}50%{transform:translateY(-1px) scaleY(1.14)}}
+.candle-logo .cl-live{animation:clGrow 1.6s ease-in-out infinite}
+@keyframes clGrow{0%,100%{height:6px; y:10.5px}50%{height:10px; y:8px}}
+/* Aprende: la parejita que enseña (torito alcista / osito bajista) */
+.maestros{display:grid; gap:14px; margin:22px 0 4px}
+@media (min-width:720px){ .maestros{grid-template-columns:1fr 1fr} }
+.maestro{display:flex; gap:15px; align-items:center; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:18px; box-shadow:var(--shadow)}
+.maestro h3{font-size:18px; display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:4px}
+.maestro p{font-size:14.5px; color:var(--ink2); font-weight:500; line-height:1.55}
+.m-face{width:72px; height:72px; flex:none; border-radius:12px; display:grid; place-items:center; border:1px solid var(--line)}
+.m-face.bull{background:var(--teal-soft)}
+.m-face.bear{background:var(--coral-soft)}
+.trend-chip{font-family:"IBM Plex Sans",sans-serif; font-size:11.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:5px}
+.trend-chip.up{background:var(--teal-soft); color:var(--teal-deep)}
+.trend-chip.down{background:var(--coral-soft); color:var(--coral-deep)}
+.brand b{font-family:"Archivo",sans-serif; font-size:16.5px; font-weight:700; line-height:1.1; display:block}
+.brand small{font-size:11px; font-weight:600; color:var(--muted); letter-spacing:.07em; text-transform:uppercase}
+.topnav{display:none; margin-left:auto; gap:2px}
+@media (min-width:900px){ .topnav{display:flex} }
+.topnav button{
+  border:0; background:transparent; color:var(--ink2); font-weight:600; font-size:15px;
+  padding:9px 13px; min-height:40px; border-radius:6px;
+}
+.topnav button:hover{color:var(--ink)}
+.topnav button[aria-current="page"]{background:var(--ink); color:var(--paper)}
+.top-cta{margin-left:auto}
+@media (min-width:900px){ .top-cta{margin-left:10px} }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  border:0; border-radius:8px; font-weight:600; text-decoration:none;
+  min-height:44px; padding:10px 18px; font-size:15px; transition:background .15s ease, border-color .15s ease;
+}
+.btn-teal{background:var(--teal); color:#fff}
+.btn-teal:hover{background:var(--teal-deep)}
+@media (prefers-color-scheme: dark){ .btn-teal{color:#08130E} .btn-teal:hover{background:var(--teal); filter:brightness(1.1)} }
+.btn-coral{background:var(--ink); color:var(--paper)}
+.btn-coral:hover{opacity:.88}
+.btn-ghost{background:var(--surface); color:var(--ink); border:1px solid var(--line2)}
+.btn-ghost:hover{border-color:var(--ink2)}
+.btn-sun{background:var(--paper); color:var(--ink)}
+.btn-sun:hover{opacity:.9}
+.btn-sm{min-height:38px; padding:7px 14px; font-size:14px}
+
+/* ---------- Bottom tab bar (mobile) ---------- */
+.tabbar{
+  position:fixed; left:0; right:0; bottom:0; z-index:60;
+  height:calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  background:var(--surface); border-top:1px solid var(--line);
+  display:grid; grid-template-columns:repeat(5,1fr);
+}
+@media (min-width:900px){ .tabbar{display:none} }
+.tabbar button{
+  border:0; background:transparent; color:var(--muted);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  font-size:11px; font-weight:600; min-height:54px; padding:6px 2px;
+}
+.tabbar button svg{width:23px; height:23px}
+.tabbar button[aria-current="page"]{color:var(--teal-deep)}
+.tabbar button[aria-current="page"] .tab-dot{background:var(--teal)}
+.tab-dot{width:5px; height:5px; border-radius:99px; background:transparent}
+
+/* ---------- Views ---------- */
+.view{display:none}
+.view.active{display:block; animation:viewIn .25s ease}
+@keyframes viewIn{from{opacity:0} to{opacity:1}}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .view.active{animation:none}
+  .candle-logo .cl-c,.candle-logo .cl-live{animation:none}
+  *{transition:none !important}
+}
+
+/* ---------- Hero ---------- */
+.hero{padding:28px 0 10px; position:relative}
+.hero-grid{display:grid; gap:24px}
+@media (min-width:900px){ .hero-grid{grid-template-columns:1.02fr .98fr; align-items:center; gap:40px} .hero{padding:48px 0 18px} }
+.pill{
+  display:inline-flex; align-items:center; gap:8px; background:transparent;
+  border:1px solid var(--line2); color:var(--ink2); font-weight:600; font-size:12px;
+  letter-spacing:.09em; text-transform:uppercase;
+  padding:6px 12px; border-radius:6px;
+}
+.hero h1{font-size:clamp(32px,7.5vw,50px); font-weight:700; margin:18px 0 14px}
+.hero h1 .hl-teal{color:var(--teal-deep)}
+.hero h1 .hl-coral{color:var(--teal-deep)}
+.hero .lead{font-size:17px; color:var(--ink2); font-weight:500; max-width:34em}
+.hero .lead b{color:var(--ink); font-weight:600}
+.hero-cta{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px}
+.hero-chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:20px}
+.chip{
+  display:inline-flex; align-items:center; gap:7px; background:var(--surface);
+  border:1px solid var(--line); border-radius:6px; padding:6px 11px;
+  font-size:13px; font-weight:500; color:var(--ink2);
+}
+.chip b{color:var(--ink); font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:12.5px}
+.hero-art{position:relative}
+.hero-art .frame{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+  box-shadow:var(--shadow-lg); overflow:hidden;
+}
+.hero-art img{width:100%; height:auto}
+.hero-badge{
+  position:absolute; display:flex; align-items:center; gap:8px;
+  background:var(--surface); border:1px solid var(--line2); border-radius:8px;
+  box-shadow:var(--shadow); padding:8px 12px; font-weight:600; font-size:13px; color:var(--ink2);
+}
+.hero-badge b{color:var(--ink); font-weight:700}
+.hero-badge.b1{top:14px; left:-4px}
+.hero-badge.b2{bottom:16px; right:-4px}
+@media (min-width:900px){ .hero-badge.b1{left:-14px} .hero-badge.b2{right:-12px} }
+
+/* Terminal panel (hero) */
+.term-head{display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line); background:var(--surface2)}
+.term-asset{font-family:"Archivo",sans-serif; font-weight:700; font-size:15.5px}
+.term-asset span{color:var(--muted); font-weight:600; font-size:13px}
+.term-px{font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:15px; margin-left:auto}
+.term-px .dn{color:var(--down); font-size:12px}
+.term-tag{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em; border:1px solid var(--line2); color:var(--muted); padding:3px 7px; border-radius:5px; text-transform:uppercase}
+.term-chart{padding:8px 6px 0}
+.term-chart svg{width:100%; height:auto; display:block}
+.term-foot{display:grid; grid-template-columns:repeat(2,1fr); border-top:1px solid var(--line)}
+@media (min-width:560px){ .term-foot{grid-template-columns:repeat(4,1fr)} }
+.term-foot .tf{padding:10px 14px; border-right:1px solid var(--line)}
+.term-foot .tf:last-child{border-right:0}
+.term-foot small{display:block; font-size:10.5px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--muted)}
+.term-foot b{font-family:"IBM Plex Mono",monospace; font-size:15.5px; font-weight:600}
+
+/* ---------- Sections ---------- */
+section.blk{padding:40px 0 8px}
+@media (min-width:900px){ section.blk{padding:56px 0 12px} }
+.sec-head{max-width:44em; margin-bottom:22px}
+.sec-tag{
+  display:inline-flex; align-items:center; gap:9px; font-weight:700; font-size:12px; letter-spacing:.13em; text-transform:uppercase;
+  margin-bottom:12px; background:none; padding:0;
+}
+.sec-tag::before{content:""; width:22px; height:2px; background:currentColor; flex:none}
+.tag-teal{color:var(--teal-deep)}
+.tag-coral{color:var(--coral-deep)}
+.tag-sun{color:var(--sun)}
+.sec-head h2{font-size:clamp(25px,5.5vw,36px); font-weight:700; margin-bottom:9px}
+.sec-head p{color:var(--ink2); font-weight:500; font-size:16.5px}
+
+/* Two pillars */
+.pillars{display:grid; gap:16px}
+@media (min-width:760px){ .pillars{grid-template-columns:1fr 1fr} }
+.pillar{
+  border-radius:var(--r-lg); padding:24px; border:1px solid var(--line);
+  background:var(--surface); box-shadow:var(--shadow); text-align:left; width:100%;
+  display:flex; flex-direction:column; gap:10px; color:var(--ink);
+}
+.pillar:hover{border-color:var(--line2)}
+.pillar .p-ico{width:52px; height:52px; border-radius:10px; display:grid; place-items:center; border:1px solid var(--line)}
+.pillar.learn .p-ico{background:var(--sun-soft)}
+.pillar.scan .p-ico{background:var(--teal-soft)}
+.pillar h3{font-size:22px; font-weight:700}
+.pillar p{color:var(--ink2); font-weight:500}
+.pillar ul{margin:2px 0 0; padding:0; list-style:none; display:grid; gap:7px}
+.pillar li{display:flex; gap:9px; font-weight:500; color:var(--ink2); font-size:15px}
+.pillar li svg{flex:none; margin-top:3px}
+.pillar .go{margin-top:auto; padding-top:10px; font-weight:700; color:var(--teal-deep); display:inline-flex; gap:7px; align-items:center; font-size:15px}
+.pillar.learn .go{color:var(--sun)}
+
+/* Steps */
+.steps{display:grid; gap:12px; counter-reset:step}
+@media (min-width:760px){ .steps{grid-template-columns:repeat(4,1fr)} }
+.step{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:18px}
+.step .n{
+  width:32px; height:32px; border-radius:7px; background:var(--ink); color:var(--paper);
+  font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:15px; display:grid; place-items:center; margin-bottom:11px;
+}
+.step h3{font-size:16.5px; font-weight:700; margin-bottom:5px}
+.step p{font-size:14.5px; color:var(--ink2); font-weight:500}
+
+/* Cards grid */
+.cards{display:grid; gap:14px}
+@media (min-width:760px){ .cards.c2{grid-template-columns:1fr 1fr} .cards.c3{grid-template-columns:repeat(3,1fr)} }
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); padding:22px; box-shadow:var(--shadow)}
+.card h3{font-size:18.5px; font-weight:700; margin-bottom:6px}
+.card p{color:var(--ink2); font-weight:500; font-size:15.5px}
+.card .ico{width:46px; height:46px; border-radius:10px; display:grid; place-items:center; margin-bottom:13px; border:1px solid var(--line)}
+.ico-teal{background:var(--teal-soft)} .ico-coral{background:var(--coral-soft)} .ico-sun{background:var(--sun-soft)}
+
+/* Signal demo */
+.demo-grid{display:grid; gap:16px}
+@media (min-width:960px){ .demo-grid{grid-template-columns:1.15fr .85fr; align-items:start} }
+.signal-card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); box-shadow:var(--shadow-lg); overflow:hidden}
+.signal-top{
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  padding:15px 18px; border-bottom:1px solid var(--line); background:var(--surface2);
+}
+.signal-top .asset{font-family:"Archivo",sans-serif; font-weight:700; font-size:19px}
+.dir{font-weight:700; font-size:12px; letter-spacing:.05em; padding:5px 10px; border-radius:6px; background:var(--coral-soft); color:var(--coral-deep)}
+.example-tag{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; letter-spacing:.07em; background:transparent; border:1px solid var(--line2); color:var(--muted); padding:4px 9px; border-radius:5px; text-transform:uppercase}
+.chart-box{padding:10px 8px 0}
+.chart-box svg{width:100%; height:auto; display:block}
+.levels{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px 18px 18px}
+@media (min-width:560px){ .levels{grid-template-columns:repeat(4,1fr)} }
+.level{background:var(--surface2); border:1px solid var(--line); border-radius:var(--r-sm); padding:10px 12px}
+.level small{display:block; font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--muted)}
+.level b{font-family:"IBM Plex Mono",monospace; font-size:17px; font-weight:600}
+.why{
+  margin:0 18px 18px; background:var(--surface2); border:1px solid var(--line);
+  border-radius:var(--r-md); padding:14px 16px; font-size:15px; font-weight:500; color:var(--ink2);
+}
+.why b{font-family:"Archivo",sans-serif; color:var(--ink)}
+.why .lesson{color:var(--teal-deep); font-weight:600}
+
+/* Radar list */
+.radar-list{display:grid; gap:10px}
+.radar-item{
+  display:flex; align-items:center; gap:12px; background:var(--surface);
+  border:1px solid var(--line); border-radius:var(--r-md); padding:13px 15px; text-align:left; width:100%; color:var(--ink);
+}
+.radar-item:hover{border-color:var(--line2)}
+.radar-item .dot{width:10px; height:10px; border-radius:50%; flex:none}
+.dot-form{background:var(--sun)} .dot-go{background:var(--up)} .dot-wait{background:var(--line2)}
+.radar-item b{font-family:"Archivo",sans-serif; font-weight:700; font-size:15.5px}
+.radar-item span{color:var(--muted); font-weight:500; font-size:13.5px; display:block}
+.radar-item .st{margin-left:auto; font-size:11.5px; font-weight:700; letter-spacing:.04em; padding:5px 9px; border-radius:6px; white-space:nowrap}
+.st-form{background:var(--sun-soft); color:var(--sun)}
+.st-go{background:var(--teal-soft); color:var(--teal-deep)}
+.st-wait{background:var(--paper2); color:var(--muted)}
+
+/* Chat demo */
+.chat-card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column}
+.chat-head{display:flex; align-items:center; gap:11px; padding:13px 16px; border-bottom:1px solid var(--line); background:var(--surface2)}
+.chat-head .avatar{width:40px; height:40px; border-radius:9px; overflow:hidden; flex:none; background:#12181F; display:grid; place-items:center}
+.chat-head b{font-family:"Archivo",sans-serif; font-size:16px; font-weight:700; display:block; line-height:1.2}
+.chat-head small{color:var(--teal-deep); font-weight:600; font-size:12.5px}
+.chat-body{padding:16px; display:flex; flex-direction:column; gap:10px; min-height:230px}
+.msg{max-width:88%; padding:11px 14px; border-radius:12px; font-size:15px; font-weight:500}
+.msg.radi{background:var(--surface2); border:1px solid var(--line); border-bottom-left-radius:4px; align-self:flex-start}
+.msg.me{background:var(--ink); color:var(--paper); border-bottom-right-radius:4px; align-self:flex-end}
+.msg b{font-weight:700}
+.chat-suggest{display:flex; flex-wrap:wrap; gap:8px; padding:0 16px 12px}
+.chat-suggest button{
+  border:1px solid var(--line2); background:transparent; color:var(--ink2);
+  border-radius:8px; padding:8px 13px; font-weight:600; font-size:13.5px; min-height:40px;
+}
+.chat-suggest button:hover{border-color:var(--teal); color:var(--teal-deep)}
+.chat-form{display:flex; gap:8px; padding:12px 14px; border-top:1px solid var(--line)}
+.chat-form input{
+  flex:1; min-width:0; border:1px solid var(--line2); border-radius:8px; padding:11px 15px;
+  font:inherit; font-size:15px; font-weight:500; background:var(--surface); color:var(--ink); min-height:44px;
+}
+.chat-form button{flex:none}
+
+/* Biblioteca / Aprende */
+.mod-tabs{display:flex; flex-wrap:wrap; gap:8px; padding-bottom:2px}
+.mod-tabs button{
+  flex:none; border:1px solid var(--line2); background:var(--surface); color:var(--ink2);
+  border-radius:8px; padding:9px 15px; font-weight:600; font-size:14.5px; min-height:42px;
+}
+.mod-tabs button:hover{color:var(--ink)}
+.mod-tabs button[aria-selected="true"]{background:var(--ink); border-color:var(--ink); color:var(--paper)}
+.mod-panel{display:none}
+.mod-panel.active{display:block; animation:viewIn .25s ease}
+.lesson-list{display:grid; gap:10px; margin-top:14px}
+@media (min-width:760px){ .lesson-list{grid-template-columns:1fr 1fr} }
+.lesson{
+  display:flex; gap:13px; background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r-md); padding:15px 16px; text-align:left; width:100%; color:var(--ink); align-items:flex-start;
+}
+.lesson:hover{border-color:var(--line2)}
+.lesson .num{
+  flex:none; font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:13.5px;
+  background:var(--surface2); border:1px solid var(--line); color:var(--teal-deep); border-radius:6px; padding:5px 8px;
+}
+.lesson b{font-size:15.5px; display:block; font-family:"Archivo",sans-serif; font-weight:700}
+.lesson span{color:var(--ink2); font-weight:500; font-size:14px; display:block}
+.lesson .play{margin-left:auto; flex:none; color:var(--muted); font-size:13px}
+.ficha{
+  background:var(--surface); border:1px solid var(--line2); border-radius:var(--r-lg);
+  padding:22px; box-shadow:var(--shadow);
+}
+.ficha .f-row{display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); font-weight:500}
+.ficha .f-row:last-of-type{border-bottom:0}
+.ficha .f-row span{color:var(--muted); font-weight:600; font-size:13.5px}
+.ficha .f-row b{text-align:right; font-weight:600}
+
+/* Quiz */
+.quiz{background:var(--ink); color:var(--paper); border-radius:var(--r-lg); padding:24px; box-shadow:var(--shadow-lg)}
+@media (prefers-color-scheme: dark){ .quiz{background:var(--surface); border:1px solid var(--line2)} }
+.quiz h3{font-size:20px; margin-bottom:6px}
+.quiz .q{font-size:16.5px; font-weight:500; margin:12px 0 14px}
+.quiz-opts{display:grid; gap:9px}
+.quiz-opts button{
+  text-align:left; border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.05); color:inherit;
+  border-radius:10px; padding:13px 15px; font-weight:600; font-size:15px; min-height:48px;
+}
+.quiz-opts button.right{border-color:#3FB27F; background:rgba(63,178,127,.16)}
+.quiz-opts button.wrong{border-color:#E0685C; background:rgba(224,104,92,.16)}
+.quiz-fb{margin-top:13px; font-weight:500; font-size:15px; min-height:24px}
+.quiz-score{font-weight:700; color:#D9B45C; font-size:13px; letter-spacing:.06em; text-transform:uppercase}
+
+/* Calculator */
+.calc-grid{display:grid; gap:14px}
+@media (min-width:760px){ .calc-grid{grid-template-columns:1fr 1fr} }
+.field label{display:block; font-weight:600; font-size:13.5px; margin-bottom:6px}
+.field input{
+  width:100%; border:1px solid var(--line2); border-radius:var(--r-sm); padding:11px 13px;
+  font:inherit; font-weight:500; background:var(--surface); color:var(--ink); min-height:46px;
+}
+.calc-out{display:grid; gap:10px; align-content:start}
+.calc-out .row{display:flex; justify-content:space-between; align-items:center; background:var(--surface2); border:1px solid var(--line); border-radius:var(--r-sm); padding:11px 14px; font-weight:500}
+.calc-out .row b{font-family:"IBM Plex Mono",monospace; font-size:16.5px; font-weight:600}
+
+/* Plans */
+.billing-toggle{display:inline-flex; background:var(--surface); border:1px solid var(--line2); border-radius:9px; padding:3px; gap:3px}
+.billing-toggle button{border:0; background:transparent; border-radius:6px; padding:8px 16px; font-weight:600; font-size:14.5px; min-height:40px; color:var(--ink2)}
+.billing-toggle button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.billing-toggle .save{font-size:11.5px; font-weight:700; background:var(--teal-soft); color:var(--teal-deep); border-radius:4px; padding:2px 6px; margin-left:5px}
+.plans{display:grid; gap:16px; margin-top:20px}
+@media (min-width:820px){ .plans{grid-template-columns:1fr 1fr} }
+.plan{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); padding:26px; box-shadow:var(--shadow); display:flex; flex-direction:column}
+.plan.elite{border-color:var(--teal); position:relative}
+.plan .flag{position:absolute; top:-13px; right:20px; background:var(--ink); color:var(--paper); font-weight:600; font-size:12px; padding:5px 11px; border-radius:6px}
+.plan h3{font-size:21px}
+.plan .price{font-family:"Archivo",sans-serif; font-weight:700; font-size:42px; margin:10px 0 2px}
+.plan .price small{font-size:15px; color:var(--muted); font-family:"IBM Plex Sans",sans-serif; font-weight:600}
+.plan .per{color:var(--muted); font-weight:500; font-size:14px; margin-bottom:14px}
+.plan ul{list-style:none; margin:0 0 20px; padding:0; display:grid; gap:9px}
+.plan li{display:flex; gap:9px; font-weight:500; color:var(--ink2); font-size:15px}
+.plan li svg{flex:none; margin-top:3px}
+.plan .btn{margin-top:auto}
+.trial-note{
+  margin-top:16px; background:var(--surface2); border:1px solid var(--line2); border-radius:var(--r-md);
+  padding:15px 17px; font-weight:500; font-size:15px;
+}
+
+/* FAQ */
+.faq details{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); margin-bottom:10px; overflow:hidden}
+.faq summary{padding:15px 18px; font-weight:600; font-size:16px; cursor:pointer; list-style:none; display:flex; justify-content:space-between; gap:10px; align-items:center; min-height:52px}
+.faq summary::-webkit-details-marker{display:none}
+.faq details p{padding:0 18px 16px; color:var(--ink2); font-weight:500}
+
+/* CTA + footer */
+.cta-band{
+  margin:44px 0 0; background:var(--ink); border-radius:16px; padding:34px 24px;
+  color:var(--paper); text-align:center; box-shadow:var(--shadow-lg);
+}
+.cta-band h2{font-size:clamp(23px,5.5vw,32px); margin-bottom:9px}
+.cta-band p{font-weight:500; opacity:.85; max-width:36em; margin:0 auto 20px}
+footer{padding:34px 0 20px; color:var(--muted); font-size:13.5px; font-weight:500}
+footer .f-in{border-top:1px solid var(--line); padding-top:20px; display:grid; gap:10px}
+.risk{font-size:13px; line-height:1.55}
+</style>
+</head>
+<body>
+
+<!-- ======= TOP MENU ======= -->
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#inicio" data-nav="inicio">
+      <span class="brand-mark" aria-hidden="true">
+        <svg class="candle-logo" width="25" height="25" viewBox="0 0 24 24" fill="none"><g class="cl-c cl-c1"><line x1="5.5" y1="5" x2="5.5" y2="20" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/><rect x="3.4" y="9" width="4.2" height="7.5" rx="1.1" fill="#35B08C"/></g><g class="cl-c cl-c2"><line x1="12" y1="4" x2="12" y2="21" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/><rect class="cl-live" x="9.9" y="10.5" width="4.2" height="6" rx="1.1" fill="#fff"/></g><g class="cl-c cl-c3"><line x1="18.5" y1="6" x2="18.5" y2="19.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/><rect x="16.4" y="8" width="4.2" height="8" rx="1.1" fill="#E0685C"/></g></svg>
+      </span>
+      <span><b>Opera y Aprende</b><small>Escáner con Radi</small></span>
+    </a>
+    <nav class="topnav" aria-label="Secciones">
+      <button data-nav="inicio" aria-current="page">Inicio</button>
+      <button data-nav="escaner">Escáner</button>
+      <button data-nav="aprende">Aprende</button>
+      <button data-nav="metodo">Método</button>
+      <button data-nav="planes">Planes</button>
+    </nav>
+    <span class="top-cta"><a class="btn btn-teal btn-sm" href="https://escaner-app-production-00fc.up.railway.app/client" target="_blank" rel="noopener">Entrar a la app</a></span>
+  </div>
+</header>
+
+<main>
+<!-- ======= VIEW: INICIO ======= -->
+<div class="view active" id="view-inicio">
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="pill">● El escáner que te enseña mientras opera contigo</span>
+          <h1>Opera, pregunta<br />y <span class="hl-teal">aprende</span> en<br />el mismo <span class="hl-coral">chat</span>.</h1>
+          <p class="lead">Un chat con IA al centro de todo: escanea el mercado, te explica cada señal con su lección y te propone la operación completa. <b>Tú decides y tú colocas</b> — el escáner nunca opera solo.</p>
+          <div class="hero-cta">
+            <button class="btn btn-coral" data-nav="aprende">Empezar a aprender</button>
+            <button class="btn btn-ghost" data-nav="escaner">Ver el escáner</button>
+          </div>
+          <div class="hero-chips">
+            <span class="chip"><b>53–99</b> activos</span>
+            <span class="chip">Señales <b>5m</b> LIMIT + STOP</span>
+            <span class="chip">Prueba <b>14 días</b> gratis</span>
+            <span class="chip">Chat + <b>voz en vivo</b></span>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="frame">
+            <div class="term-head">
+              <span class="term-asset">Plata <span>· SI=F · 5m</span></span>
+              <span class="term-px">31.240 <span class="dn">▼ corto</span></span>
+              <span class="term-tag">Ejemplo</span>
+            </div>
+            <div class="term-chart">
+              <svg viewBox="0 0 640 300" role="img" aria-label="Panel de ejemplo: gráfico de velas rechazando el borde superior del Volume Profile, con VAH, POC, VAL y VWAP marcados">
+                <g style="stroke:var(--line)" stroke-width="1">
+                  <line x1="0" y1="42" x2="640" y2="42"/><line x1="0" y1="102" x2="640" y2="102"/>
+                  <line x1="0" y1="162" x2="640" y2="162"/><line x1="0" y1="222" x2="640" y2="222"/>
+                </g>
+                <line x1="0" y1="56" x2="640" y2="56" style="stroke:var(--down)" stroke-width="1.5" stroke-dasharray="6 5"/>
+                <line x1="0" y1="152" x2="640" y2="152" stroke="#8A94A0" stroke-width="1.5"/>
+                <line x1="0" y1="240" x2="640" y2="240" style="stroke:var(--up)" stroke-width="1.5" stroke-dasharray="6 5"/>
+                <text x="8" y="48" font-family="IBM Plex Mono, monospace" font-size="11.5" font-weight="600" style="fill:var(--down)">VAH</text>
+                <text x="8" y="144" font-family="IBM Plex Mono, monospace" font-size="11.5" font-weight="600" fill="#8A94A0">POC</text>
+                <text x="8" y="232" font-family="IBM Plex Mono, monospace" font-size="11.5" font-weight="600" style="fill:var(--up)">VAL</text>
+                <path d="M60 252 C 200 224, 340 182, 470 140 S 590 118, 632 114" fill="none" style="stroke:var(--teal)" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" opacity=".55"/>
+                <text x="486" y="132" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" style="fill:var(--teal-deep)" opacity=".75">VWAP</text>
+                <g>
+                  <rect x="70" y="205" width="19" height="34" rx="1.5" style="fill:var(--up)"/><line x1="79.5" y1="192" x2="79.5" y2="248" style="stroke:var(--up)" stroke-width="2"/>
+                  <rect x="114" y="182" width="19" height="38" rx="1.5" style="fill:var(--up)"/><line x1="123.5" y1="170" x2="123.5" y2="230" style="stroke:var(--up)" stroke-width="2"/>
+                  <rect x="158" y="160" width="19" height="34" rx="1.5" style="fill:var(--up)"/><line x1="167.5" y1="148" x2="167.5" y2="204" style="stroke:var(--up)" stroke-width="2"/>
+                  <rect x="202" y="138" width="19" height="36" rx="1.5" style="fill:var(--up)"/><line x1="211.5" y1="126" x2="211.5" y2="184" style="stroke:var(--up)" stroke-width="2"/>
+                  <rect x="246" y="116" width="19" height="32" rx="1.5" style="fill:var(--up)"/><line x1="255.5" y1="104" x2="255.5" y2="158" style="stroke:var(--up)" stroke-width="2"/>
+                  <rect x="290" y="94" width="19" height="30" rx="1.5" style="fill:var(--up)"/><line x1="299.5" y1="82" x2="299.5" y2="134" style="stroke:var(--up)" stroke-width="2"/>
+                  <rect x="334" y="76" width="19" height="27" rx="1.5" style="fill:var(--down)"/><line x1="343.5" y1="54" x2="343.5" y2="118" style="stroke:var(--down)" stroke-width="2"/>
+                  <rect x="378" y="88" width="19" height="34" rx="1.5" style="fill:var(--down)"/><line x1="387.5" y1="78" x2="387.5" y2="132" style="stroke:var(--down)" stroke-width="2"/>
+                  <rect x="422" y="110" width="19" height="36" rx="1.5" style="fill:var(--down)"/><line x1="431.5" y1="100" x2="431.5" y2="156" style="stroke:var(--down)" stroke-width="2"/>
+                  <rect x="466" y="132" width="19" height="34" rx="1.5" style="fill:var(--down)"/><line x1="475.5" y1="122" x2="475.5" y2="176" style="stroke:var(--down)" stroke-width="2"/>
+                  <rect x="510" y="150" width="19" height="30" rx="1.5" style="fill:var(--down)"/><line x1="519.5" y1="140" x2="519.5" y2="190" style="stroke:var(--down)" stroke-width="2"/>
+                  <rect x="554" y="146" width="19" height="22" rx="1.5" style="fill:var(--up)"/><line x1="563.5" y1="136" x2="563.5" y2="178" style="stroke:var(--up)" stroke-width="2"/>
+                </g>
+                <circle cx="343.5" cy="57" r="8" fill="none" style="stroke:var(--down)" stroke-width="2"/>
+                <text x="300" y="30" font-family="IBM Plex Sans, sans-serif" font-size="12.5" font-weight="600" style="fill:var(--coral-deep)">3.er toque · rechazo en el extremo</text>
+                <g style="fill:var(--line2)" opacity=".85">
+                  <rect x="72" y="276" width="15" height="10"/><rect x="116" y="274" width="15" height="12"/><rect x="160" y="272" width="15" height="14"/>
+                  <rect x="204" y="273" width="15" height="13"/><rect x="248" y="270" width="15" height="16"/><rect x="292" y="268" width="15" height="18"/>
+                  <rect x="336" y="260" width="15" height="26"/><rect x="380" y="264" width="15" height="22"/><rect x="424" y="268" width="15" height="18"/>
+                  <rect x="468" y="271" width="15" height="15"/><rect x="512" y="274" width="15" height="12"/><rect x="556" y="276" width="15" height="10"/>
+                </g>
+              </svg>
+            </div>
+            <div class="term-foot">
+              <div class="tf"><small>Gatillo</small><b>31.240</b></div>
+              <div class="tf"><small>Stop</small><b>31.610</b></div>
+              <div class="tf"><small>TP1 · POC</small><b>30.480</b></div>
+              <div class="tf"><small>TP2 · VAL</small><b>29.905</b></div>
+            </div>
+          </div>
+          <span class="hero-badge b1"><b>Orden completa</b> Gatillo · Stop · TP1 · TP2</span>
+          <span class="hero-badge b2"><b>¿Por qué?</b> Cada señal cita su lección</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="blk" aria-labelledby="pilares-h">
+      <div class="sec-head">
+        <span class="sec-tag tag-sun">Dos pilares, el mismo peso</span>
+        <h2 id="pilares-h">Aprender y escanear, juntos</h2>
+        <p>Esto no es un panel frío de trading. Es una app de aprendizaje con un escáner dentro — y un escáner que, en cada señal, te deja la lección aprendida.</p>
+      </div>
+      <div class="pillars">
+        <button class="pillar learn" data-nav="aprende">
+          <span class="p-ico" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M4 5.5C6 4 9 4 12 6c3-2 6-2 8-.5V19c-2-1.5-5-1.5-8 .5-3-2-6-2-8-.5V5.5Z" stroke="#8A6D1F" stroke-width="2" stroke-linejoin="round"/><path d="M12 6v13.5" stroke="#8A6D1F" stroke-width="2"/></svg></span>
+          <h3>Pilar 1 · Aprende</h3>
+          <p>La Biblioteca sigue el temario de tu curso, módulo por módulo. Cada activo trae su <b>ficha que enseña</b>: qué mirar, por qué importa y qué lección lo explica.</p>
+          <ul>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Módulo 2 · Análisis Técnico (2.3–2.11)</li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Módulo 4 · Ejecución y Módulo 5 · Gerencia</li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Módulo 8 · Indicadores + material de Forex</li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>El «¿Por qué?» de cada señal cita su lección exacta</li>
+          </ul>
+          <span class="go">Ir a la Biblioteca <span aria-hidden="true">→</span></span>
+        </button>
+        <button class="pillar scan" data-nav="escaner">
+          <span class="p-ico" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="3" fill="#0B7A4B"/><circle cx="11" cy="11" r="6.5" stroke="#0B5C46" stroke-width="2" opacity=".6"/><circle cx="11" cy="11" r="10" stroke="#0B5C46" stroke-width="2" opacity=".3"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#0B5C46" stroke-width="2.6" stroke-linecap="round"/></svg></span>
+          <h3>Pilar 2 · Escáner</h3>
+          <p>El barrido corre sin parar: tendencia mayor, Volume Profile, VWAP y noticias. Cuando algo vale la pena, Radi te lo trae al chat como propuesta completa.</p>
+          <ul>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Barrido y radar de noticias</li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Análisis dibujado y croquis de cada señal</li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Orden completa: Gatillo · Stop · TP1 · TP2</li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Calculadora de riesgo incluida</li>
+          </ul>
+          <span class="go">Ir al Escáner <span aria-hidden="true">→</span></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="blk" aria-labelledby="flujo-h">
+      <div class="sec-head">
+        <span class="sec-tag tag-teal">Así funciona</span>
+        <h2 id="flujo-h">Del barrido a tu decisión, en 4 pasos</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><h3>Radi escanea</h3><p>El motor revisa los activos contra la tendencia mayor, el perfil de volumen y el calendario de noticias.</p></div>
+        <div class="step"><span class="n">2</span><h3>Te lo explica</h3><p>La señal llega al chat con su dibujo y su «¿Por qué?», citando la lección del curso que la respalda.</p></div>
+        <div class="step"><span class="n">3</span><h3>Te propone</h3><p>Orden completa y lista: tipo LIMIT o STOP, gatillo, stop, TP1 y TP2. Aconseja y propone — nunca coloca solo.</p></div>
+        <div class="step"><span class="n">4</span><h3>Tú decides</h3><p>Si te convence, la colocas tú en tu plataforma. Radi vigila y te avisa: protege, cierra o posible giro.</p></div>
+      </div>
+    </section>
+
+    <div class="cta-band">
+      <h2>Tu primera lección y tu primera señal van juntas</h2>
+      <p>Prueba de 14 días con 5 activos, sin compromiso de permanencia. Aprende el método mientras el escáner trabaja.</p>
+      <button class="btn btn-sun" data-nav="planes">Ver los planes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======= VIEW: ESCÁNER ======= -->
+<div class="view" id="view-escaner">
+  <div class="wrap">
+    <section class="blk" aria-labelledby="esc-h" style="padding-top:26px">
+      <div class="sec-head">
+        <span class="sec-tag tag-teal">Pilar 2 · El escáner como tal</span>
+        <h2 id="esc-h">Barrido, radar y la orden lista</h2>
+        <p>Así se ve una señal cuando Radi la trae al chat: dibujo, niveles y explicación. La de abajo es una <b>señal de ejemplo con fines educativos</b> — en la app, el escáner trabaja sobre el mercado en vivo.</p>
+      </div>
+      <div class="demo-grid">
+        <article class="signal-card" aria-label="Señal de ejemplo">
+          <div class="signal-top">
+            <span class="asset">Plata (SI=F)</span>
+            <span class="dir">CORTO · STOP</span>
+            <span class="example-tag">Ejemplo educativo</span>
+          </div>
+          <div class="chart-box">
+            <svg viewBox="0 0 640 300" role="img" aria-label="Gráfico de ejemplo: precio rechazando el borde superior del Volume Profile, con POC, VAH, VAL y VWAP marcados">
+              <!-- Volume Profile bars -->
+              <g opacity=".9">
+                <rect x="8" y="52" width="58" height="13" rx="3" fill="#B23A2E" opacity=".55"/>
+                <rect x="8" y="72" width="96" height="13" rx="3" fill="#C9A227" opacity=".75"/>
+                <rect x="8" y="92" width="150" height="13" rx="3" fill="#C9A227"/>
+                <rect x="8" y="112" width="118" height="13" rx="3" fill="#C9A227" opacity=".8"/>
+                <rect x="8" y="132" width="82" height="13" rx="3" fill="#0B7A4B" opacity=".55"/>
+                <rect x="8" y="152" width="52" height="13" rx="3" fill="#0B7A4B" opacity=".4"/>
+                <rect x="8" y="196" width="34" height="13" rx="3" fill="#0B7A4B" opacity=".3"/>
+              </g>
+              <!-- Level lines -->
+              <line x1="0" y1="60" x2="640" y2="60" stroke="#B23A2E" stroke-width="2" stroke-dasharray="7 6"/>
+              <line x1="0" y1="99" x2="640" y2="99" stroke="#8A6D1F" stroke-width="2"/>
+              <line x1="0" y1="203" x2="640" y2="203" stroke="#0B5C46" stroke-width="2" stroke-dasharray="7 6"/>
+              <text x="630" y="52" text-anchor="end" font-size="13" font-weight="800" fill="#9C2F24">VAH · borde de oferta</text>
+              <text x="630" y="91" text-anchor="end" font-size="13" font-weight="800" fill="#8A6D1F">POC · donde más se negoció</text>
+              <text x="630" y="222" text-anchor="end" font-size="13" font-weight="800" fill="#0A6E64">VAL · borde de demanda</text>
+              <!-- VWAP -->
+              <path d="M150 235 C 260 205, 360 165, 470 128 S 600 96, 632 92" fill="none" stroke="#7A5AF8" stroke-width="0" />
+              <path d="M150 238 C 270 210, 380 178, 480 150 S 590 128, 632 126" fill="none" stroke="#0B5C46" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round" opacity=".65"/>
+              <text x="470" y="142" font-size="12.5" font-weight="800" fill="#0A6E64" opacity=".8">VWAP</text>
+              <!-- Candles -->
+              <g>
+                <rect x="205" y="168" width="17" height="42" rx="2" fill="#0B7A4B"/><line x1="213" y1="156" x2="213" y2="220" stroke="#0B5C46" stroke-width="2.5"/>
+                <rect x="248" y="140" width="17" height="46" rx="2" fill="#0B7A4B"/><line x1="256" y1="128" x2="256" y2="196" stroke="#0B5C46" stroke-width="2.5"/>
+                <rect x="291" y="118" width="17" height="40" rx="2" fill="#0B7A4B"/><line x1="299" y1="106" x2="299" y2="168" stroke="#0B5C46" stroke-width="2.5"/>
+                <rect x="334" y="96" width="17" height="44" rx="2" fill="#0B7A4B"/><line x1="342" y1="84" x2="342" y2="150" stroke="#0B5C46" stroke-width="2.5"/>
+                <rect x="377" y="76" width="17" height="38" rx="2" fill="#0B7A4B"/><line x1="385" y1="64" x2="385" y2="124" stroke="#0B5C46" stroke-width="2.5"/>
+                <rect x="420" y="70" width="17" height="30" rx="2" fill="#B23A2E"/><line x1="428" y1="46" x2="428" y2="112" stroke="#B23A2E" stroke-width="2.5"/>
+                <rect x="463" y="82" width="17" height="42" rx="2" fill="#B23A2E"/><line x1="471" y1="72" x2="471" y2="134" stroke="#B23A2E" stroke-width="2.5"/>
+                <rect x="506" y="104" width="17" height="40" rx="2" fill="#B23A2E"/><line x1="514" y1="94" x2="514" y2="154" stroke="#B23A2E" stroke-width="2.5"/>
+              </g>
+              <circle cx="428" cy="52" r="9" fill="none" stroke="#B23A2E" stroke-width="2.5"/>
+              <text x="392" y="34" font-size="13" font-weight="800" fill="#9C2F24">3.er toque + rechazo ↓</text>
+            </svg>
+          </div>
+          <div class="levels">
+            <div class="level"><small>Gatillo</small><b>31.240</b></div>
+            <div class="level"><small>Stop</small><b>31.610</b></div>
+            <div class="level"><small>TP1 · POC</small><b>30.480</b></div>
+            <div class="level"><small>TP2 · VAL</small><b>29.905</b></div>
+          </div>
+          <p class="why"><b>¿Por qué?</b> Tercer toque en el borde superior del perfil con vela de rechazo y volumen: la oferta manda en el extremo y el viaje natural es de extremo a extremo. <span class="lesson">Lección 2.7 · Zonas de oferta y demanda — Módulo 2.</span></p>
+        </article>
+
+        <div>
+          <h3 class="disp" style="font-size:20px; margin-bottom:10px">Radar de la sesión</h3>
+          <div class="radar-list" role="list">
+            <button class="radar-item" data-ask="radar"><span class="dot dot-go"></span><span><b>Oro (GC=F)</b><span>Gatillo confirmado · vela + volumen</span></span><span class="st st-go">LISTA</span></button>
+            <button class="radar-item" data-ask="formacion"><span class="dot dot-form"></span><span><b>Nasdaq 100 (NQ=F)</b><span>En formación · llegando al extremo</span></span><span class="st st-form">FORMANDO</span></button>
+            <button class="radar-item" data-ask="noticias"><span class="dot dot-wait"></span><span><b>Crudo WTI (CL=F)</b><span>En espera · dato de inventarios hoy</span></span><span class="st st-wait">ESPERA</span></button>
+            <button class="radar-item" data-ask="radar"><span class="dot dot-form"></span><span><b>Russell 2000 (RTY=F)</b><span>En formación · marco 4H en el borde</span></span><span class="st st-form">FORMANDO</span></button>
+          </div>
+          <p style="margin-top:12px; color:var(--muted); font-weight:700; font-size:13.5px">Estados del radar de ejemplo. Toca uno y Radi te lo explica en el chat de abajo.</p>
+
+          <div class="chat-card" style="margin-top:16px">
+            <div class="chat-head">
+              <span class="avatar" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><line x1="5.5" y1="5" x2="5.5" y2="20" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/><rect x="3.4" y="9" width="4.2" height="7.5" rx="1.1" fill="#35B08C"/><line x1="12" y1="4" x2="12" y2="21" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/><rect x="9.9" y="10.5" width="4.2" height="6" rx="1.1" fill="#fff"/><line x1="18.5" y1="6" x2="18.5" y2="19.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/><rect x="16.4" y="8" width="4.2" height="8" rx="1.1" fill="#E0685C"/></svg></span>
+              <span><b>Radi · tu chat de trading</b><small>● En línea — pregúntame por texto o por voz</small></span>
+            </div>
+            <div class="chat-body" id="chatBody" aria-live="polite">
+              <div class="msg radi">Hola, soy <b>Radi</b>. Escaneo el mercado y te explico cada señal con la lección que la respalda. Pregúntame por una señal, por el radar o por una lección del curso.</div>
+            </div>
+            <div class="chat-suggest">
+              <button data-ask="senal">¿Por qué esa señal de la Plata?</button>
+              <button data-ask="formacion">¿Qué significa «en formación»?</button>
+              <button data-ask="noticias">¿Qué noticias hay hoy?</button>
+              <button data-ask="riesgo">¿Cuánto arriesgo por operación?</button>
+            </div>
+            <form class="chat-form" id="chatForm">
+              <input id="chatInput" type="text" placeholder="Escríbele a Radi…" aria-label="Escribe tu pregunta para Radi" autocomplete="off" />
+              <button class="btn btn-teal btn-sm" type="submit">Enviar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="blk" aria-labelledby="calc-h">
+      <div class="sec-head">
+        <span class="sec-tag tag-coral">Herramienta</span>
+        <h2 id="calc-h">Calculadora de riesgo</h2>
+        <p>La misma lógica de la app: primero el riesgo, después el tamaño. Prueba con tus números.</p>
+      </div>
+      <div class="card">
+        <div class="calc-grid">
+          <div style="display:grid; gap:13px">
+            <div class="field"><label for="cCapital">Capital de la cuenta ($)</label><input id="cCapital" type="number" inputmode="decimal" value="1000" min="0" /></div>
+            <div class="field"><label for="cRisk">Riesgo por operación (%)</label><input id="cRisk" type="number" inputmode="decimal" value="1" min="0" step="0.1" /></div>
+            <div class="field"><label for="cEntry">Precio de entrada (gatillo)</label><input id="cEntry" type="number" inputmode="decimal" value="31.240" step="0.001" /></div>
+            <div class="field"><label for="cStop">Precio del stop</label><input id="cStop" type="number" inputmode="decimal" value="31.610" step="0.001" /></div>
+          </div>
+          <div class="calc-out" aria-live="polite">
+            <div class="row"><span>Riesgo en dinero</span><b id="oRisk">$10.00</b></div>
+            <div class="row"><span>Distancia al stop</span><b id="oDist">0.370 pts</b></div>
+            <div class="row"><span>Tamaño (unidades)</span><b id="oSize">27.0</b></div>
+            <div class="row"><span>Si llega a TP1 (1R) ganas</span><b id="oTp1">$10.00</b></div>
+            <div class="row"><span>Si llega a TP2 (2R) ganas</span><b id="oTp2">$20.00</b></div>
+            <p style="font-weight:700; color:var(--muted); font-size:14px">Regla del método: TP1 = 1R y TP2 = 2R. Al tocar TP1, la recomendación es cobrar; a mitad de camino (+1R), proteger con el stop en cero.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ======= VIEW: APRENDE ======= -->
+<div class="view" id="view-aprende">
+  <div class="wrap">
+    <section class="blk" aria-labelledby="ap-h" style="padding-top:26px">
+      <div class="sec-head">
+        <span class="sec-tag tag-sun">Pilar 1 · La Biblioteca</span>
+        <h2 id="ap-h">Aprende con el temario de tu curso</h2>
+        <p>Nada de bibliotecas genéricas: «Aprende» sigue tu curso, módulo por módulo y lección por lección. Cuando una señal nace, su «¿Por qué?» te lleva a la lección exacta que la explica.</p>
+      </div>
+      <div class="maestros">
+        <div class="maestro">
+          <span class="m-face bull" aria-hidden="true"><svg width="62" height="62" viewBox="0 0 64 64" fill="none"><path d="M15 17C10 16 6.5 12 6 6.5c3.8 1.8 6.8 1.8 9-.2 1.2 3.8.8 7.8-.0 10.7Z" fill="#FFE3B3"/><path d="M49 17c5-1 8.5-5 9-10.5-3.8 1.8-6.8 1.8-9-.2-1.2 3.8-.8 7.8 0 10.7Z" fill="#FFE3B3"/><ellipse cx="10.5" cy="27" rx="6" ry="4.4" fill="#C97F4A" transform="rotate(-22 10.5 27)"/><ellipse cx="53.5" cy="27" rx="6" ry="4.4" fill="#C97F4A" transform="rotate(22 53.5 27)"/><rect x="14" y="12" width="36" height="39" rx="16" fill="#DE9A5B"/><path d="M27 13.5q5-5 10 0" stroke="#B96F33" stroke-width="3" stroke-linecap="round"/><ellipse cx="32" cy="42.5" rx="12" ry="9" fill="#FBE3C2"/><circle cx="27.5" cy="42.5" r="1.8" fill="#8A5A2B"/><circle cx="36.5" cy="42.5" r="1.8" fill="#8A5A2B"/><path d="M28 47.5q4 3 8 0" stroke="#8A5A2B" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="30" r="2.7" fill="#17302C"/><circle cx="40" cy="30" r="2.7" fill="#17302C"/><circle cx="25" cy="29" r="1" fill="#fff"/><circle cx="41" cy="29" r="1" fill="#fff"/></svg></span>
+          <div>
+            <h3>Torito <span class="trend-chip up">Alcista ↑</span></h3>
+            <p>Tu maestro del lado comprador: cree que el precio va a <b>subir</b>. Compra barato en los extremos y espera vender más caro. Cuando el torito manda, la tendencia es tu amiga.</p>
+          </div>
+        </div>
+        <div class="maestro">
+          <span class="m-face bear" aria-hidden="true"><svg width="62" height="62" viewBox="0 0 64 64" fill="none"><circle cx="15" cy="15" r="8.5" fill="#8A5A3B"/><circle cx="15" cy="15" r="4.2" fill="#D9B48C"/><circle cx="49" cy="15" r="8.5" fill="#8A5A3B"/><circle cx="49" cy="15" r="4.2" fill="#D9B48C"/><circle cx="32" cy="37" r="24" fill="#A9744F"/><path d="M21 24q3-2.5 6-1M37 23q3-1.5 6 1" stroke="#7A4E2A" stroke-width="2.2" stroke-linecap="round"/><circle cx="23.5" cy="31" r="2.7" fill="#17302C"/><circle cx="40.5" cy="31" r="2.7" fill="#17302C"/><circle cx="24.5" cy="30" r="1" fill="#fff"/><circle cx="41.5" cy="30" r="1" fill="#fff"/><ellipse cx="32" cy="43" rx="11" ry="8.5" fill="#EBD3AE"/><ellipse cx="32" cy="39.5" rx="4.2" ry="3.1" fill="#5C3A1E"/><path d="M32 42.5v2.5M28.5 48q3.5-2.5 7 0" stroke="#5C3A1E" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <div>
+            <h3>Osito <span class="trend-chip down">Bajista ↓</span></h3>
+            <p>Tu maestro del lado vendedor: cree que el precio va a <b>bajar</b>. Vende caro en los techos y protege lo ganado. Cuando el osito manda, toca cuidar el capital y esperar.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mod-tabs" role="tablist" aria-label="Módulos del curso">
+        <button role="tab" aria-selected="true" data-mod="m2">Módulo 2 · Análisis Técnico</button>
+        <button role="tab" aria-selected="false" data-mod="m4">Módulo 4 · Ejecución</button>
+        <button role="tab" aria-selected="false" data-mod="m5">Módulo 5 · Gerencia</button>
+        <button role="tab" aria-selected="false" data-mod="m8">Módulo 8 · Indicadores</button>
+        <button role="tab" aria-selected="false" data-mod="fx">Forex</button>
+      </div>
+
+      <div class="mod-panel active" id="mod-m2">
+        <div class="lesson-list">
+          <button class="lesson" data-lesson="2.3"><span class="num">2.3</span><span><b>Tendencia: la escalera de Dow</b><span>Máximos y mínimos que suben o bajan: así se lee la dirección antes que todo lo demás.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="2.4"><span class="num">2.4</span><span><b>Canales y líneas de tendencia</b><span>El precio viaja dentro de canales; los bordes son zonas de decisión, no adornos.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="2.5"><span class="num">2.5</span><span><b>Soportes, resistencias y ejes de toques</b><span>Un nivel con varios toques a la misma altura es un eje: ahí el precio se defiende.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="2.7"><span class="num">2.7</span><span><b>Zonas de oferta y demanda</b><span>El principio base de todo el método: el precio se mueve por el desequilibrio entre ambas.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="2.9"><span class="num">2.9</span><span><b>Velas de confirmación</b><span>Rechazo, aceptación y la vela grande con volumen que confirma la huella institucional.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="2.11"><span class="num">2.11</span><span><b>Ondas de Elliott: el 3 es el número mágico</b><span>Impulsos de 5 y correcciones de 3; nunca se opera contra una onda 3 en curso.</span></span><span class="play" aria-hidden="true">▶</span></button>
+        </div>
+      </div>
+      <div class="mod-panel" id="mod-m4">
+        <div class="lesson-list">
+          <button class="lesson" data-lesson="4"><span class="num">M4</span><span><b>Órdenes LIMIT y STOP</b><span>Entrar antes, en el extremo, con la orden esperando al precio — casi siempre LIMIT.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="4"><span class="num">M4</span><span><b>El stop va tras el nivel</b><span>Detrás del extremo y con holgura: donde todos aprietan el stop, el mercado barre.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="4"><span class="num">M4</span><span><b>Dos etapas: formación → entrada</b><span>El toque se anticipa; la orden solo nace con vela de confirmación y volumen.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="4"><span class="num">M4</span><span><b>Entrar antes, salir con ganancia</b><span>Y esperar un rally nuevo: una salida buena no se persigue.</span></span><span class="play" aria-hidden="true">▶</span></button>
+        </div>
+      </div>
+      <div class="mod-panel" id="mod-m5">
+        <div class="lesson-list">
+          <button class="lesson" data-lesson="5"><span class="num">M5</span><span><b>TP1 se cobra</b><span>Al tocar el primer profit, la recomendación es cerrar: una ganadora no se devuelve.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="5"><span class="num">M5</span><span><b>Proteger a +1R</b><span>A mitad del recorrido, stop a cero (breakeven) y la operación ya no puede perder.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="5"><span class="num">M5</span><span><b>Velocidad × tiempo</b><span>Las posiciones son para cobrar en 5–25 minutos; si va suave, se sale antes.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="5"><span class="num">M5</span><span><b>Alertas de giro y de cierre</b><span>El sistema grita — «posible giro, cierra posición» — y el cierre lo haces tú, en vivo.</span></span><span class="play" aria-hidden="true">▶</span></button>
+        </div>
+      </div>
+      <div class="mod-panel" id="mod-m8">
+        <div class="lesson-list">
+          <button class="lesson" data-lesson="8"><span class="num">M8</span><span><b>Volume Profile: POC, VAH y VAL</b><span>Las barras largas son la pelea; los extremos mandan y el viaje es de extremo a extremo.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="8"><span class="num">M8</span><span><b>VWAP: el imán del día</b><span>La estrategia central combina VWAP + Volume Profile para operar los toques de extremos.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="8"><span class="num">M8</span><span><b>EMAs: complemento, no dirección</b><span>Ajustan la entrada; jamás crean una dirección contra la tendencia mayor.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="8"><span class="num">M8</span><span><b>Volumen institucional (RVOL)</b><span>Volumen alto + vela grande + movimiento rápido: la firma del dinero grande entrando.</span></span><span class="play" aria-hidden="true">▶</span></button>
+        </div>
+      </div>
+      <div class="mod-panel" id="mod-fx">
+        <div class="lesson-list">
+          <button class="lesson" data-lesson="FX"><span class="num">FX</span><span><b>Sesiones: Asia, Londres, Nueva York</b><span>El ciclo completo y las ventanas de volatilidad: 21:00, 23:00, 02:00, 09:30 y 11:00 ET.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="FX"><span class="num">FX</span><span><b>Pares y su lectura por escalas</b><span>La tendencia mayor manda en diario/4H; la de 5m es ruido salvo que rompa la escalera.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="FX"><span class="num">FX</span><span><b>Noticias: antes o después, nunca dentro</b><span>En datos de alto impacto no se entra: la orden se deja antes o se espera la reacción.</span></span><span class="play" aria-hidden="true">▶</span></button>
+          <button class="lesson" data-lesson="FX"><span class="num">FX</span><span><b>Manipulación y reglas de Wyckoff</b><span>Barridas de stops (spring / upthrust): no entres en la primera ruptura del extremo.</span></span><span class="play" aria-hidden="true">▶</span></button>
+        </div>
+      </div>
+      <p id="lessonNote" style="margin-top:14px; font-weight:700; color:var(--teal-deep); min-height:24px" aria-live="polite"></p>
+    </section>
+
+    <section class="blk" aria-labelledby="ficha-h">
+      <div class="demo-grid">
+        <div>
+          <div class="sec-head" style="margin-bottom:12px">
+            <span class="sec-tag tag-teal">En cada activo</span>
+            <h2 id="ficha-h" style="font-size:clamp(24px,5.5vw,32px)">La ficha que enseña</h2>
+            <p>Cada activo del escáner abre con su ficha: la lectura completa del método, en lenguaje simple. Así aprendes el activo mientras lo vigilas.</p>
+          </div>
+          <div class="quiz" id="quiz">
+            <span class="quiz-score" id="quizStep">Comprobación · 1 de 3</span>
+            <h3>Comprueba lo aprendido</h3>
+            <p class="q" id="quizQ"></p>
+            <div class="quiz-opts" id="quizOpts"></div>
+            <p class="quiz-fb" id="quizFb" aria-live="polite"></p>
+          </div>
+        </div>
+        <article class="ficha" aria-label="Ficha de ejemplo de un activo">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px">
+            <h3 class="disp" style="font-size:20px">Ficha · Oro (GC=F)</h3>
+            <span class="example-tag" style="margin-left:auto">Ejemplo</span>
+          </div>
+          <div class="f-row"><span>Tendencia mayor (Dow)</span><b>Alcista · HH / HL en 4H</b></div>
+          <div class="f-row"><span>Marco 4H</span><b>Canal alcista, precio en zona media-alta</b></div>
+          <div class="f-row"><span>Volume Profile</span><b>POC abajo · viaje hacia el VAH</b></div>
+          <div class="f-row"><span>Conteo probable (Elliott)</span><b>Corrección A-B-C terminando</b></div>
+          <div class="f-row"><span>Zona de volatilidad diaria</span><b>Lejos — mercado en compresión</b></div>
+          <div class="f-row"><span>Qué esperar</span><b>Retroceso al extremo → confirmación</b></div>
+          <p class="why" style="margin:14px 0 0"><b>La lección de esta ficha:</b> la tendencia mayor se declara primero; los complementos (noticias, velas, EMAs, perfil) solo ajustan. <span class="lesson">Orden de análisis · Módulo 2.</span></p>
+        </article>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ======= VIEW: MÉTODO ======= -->
+<div class="view" id="view-metodo">
+  <div class="wrap">
+    <section class="blk" aria-labelledby="met-h" style="padding-top:26px">
+      <div class="sec-head">
+        <span class="sec-tag tag-coral">La esencia</span>
+        <h2 id="met-h">El método, en 6 ideas</h2>
+        <p>Todo el escáner — y todo el curso — cuelga de estas ideas. Son las mismas que Radi usa para escanear y para enseñarte.</p>
+      </div>
+      <div class="cards c2">
+        <div class="card"><span class="ico ico-teal"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 18V8m0 10h16M4 18l5-6 4 3 7-8" stroke="#0A6E64" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>1 · El mercado es oferta y demanda</h3><p>El principio base. Comprar donde manda la demanda (barato: suelos y extremos) y vender donde manda la oferta (caro: techos y el extremo contrario). Todo lo demás — canales, VWAP, perfil — es el mapa de dónde actuó cada fuerza.</p></div>
+        <div class="card"><span class="ico ico-sun"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 17l5-6 4 3 6-8" stroke="#8A6D1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h6v6" stroke="#8A6D1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>2 · La tendencia mayor manda</h3><p>Primero se declara la tendencia en diario/4H/1H con la escalera de Dow. Las propuestas van a favor; ir contra ella es la excepción acotada: extremo mayor intacto, de varios toques, con rechazo confirmado.</p></div>
+        <div class="card"><span class="ico ico-coral"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="4" height="14" rx="1.5" fill="#9C2F24"/><rect x="10" y="8" width="4" height="8" rx="1.5" fill="#9C2F24" opacity=".6"/><rect x="17" y="5" width="4" height="14" rx="1.5" fill="#9C2F24"/></svg></span><h3>3 · De extremo a extremo</h3><p>VWAP + Volume Profile: las entradas van en los extremos (VAL/VAH) y los objetivos miran al POC y al borde opuesto. La zona de barras largas es la pelea — ahí no van ni entradas ni stops a mitad de camino.</p></div>
+        <div class="card"><span class="ico ico-teal"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="7" cy="7" r="3" stroke="#0A6E64" stroke-width="2.2"/><circle cx="17" cy="7" r="3" stroke="#0A6E64" stroke-width="2.2" opacity=".6"/><circle cx="12" cy="17" r="3" stroke="#0A6E64" stroke-width="2.2" opacity=".35"/></svg></span><h3>4 · El 3 es el número mágico</h3><p>Zonas de 3 toques, triple confirmación, tres escalas de Dow, correcciones de 3 patas de Elliott. Cuando varios factores coinciden en el mismo extremo, el precio va al otro lado la mayoría de las veces.</p></div>
+        <div class="card"><span class="ico ico-sun"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="#8A6D1F" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="12" r="3.2" stroke="#8A6D1F" stroke-width="2.2"/></svg></span><h3>5 · La huella institucional confirma</h3><p>Volumen alto + vela grande + movimiento rápido, en el extremo. Sin esa huella no hay orden, por bonita que parezca la figura. Y si la venta rápida viene en contra de tu posición: salir lo antes posible.</p></div>
+        <div class="card"><span class="ico ico-coral"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-7.5-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 7.5 3.6C19.5 16.4 12 21 12 21Z" stroke="#9C2F24" stroke-width="2.2" stroke-linejoin="round"/></svg></span><h3>6 · Tú colocas, tú cierras</h3><p>El escáner aconseja y propone; jamás coloca ni cierra por ti. Las posiciones se diseñan para cobrar en 5–25 minutos, con gestión en vivo: alerta de protección a +1R, de cierre al cobrar TP1 y de posible giro.</p></div>
+      </div>
+    </section>
+
+    <section class="blk faq" aria-labelledby="faq-h">
+      <div class="sec-head">
+        <span class="sec-tag tag-teal">Dudas frecuentes</span>
+        <h2 id="faq-h">Preguntas de siempre</h2>
+      </div>
+      <details><summary>¿El escáner coloca las operaciones por mí?<span aria-hidden="true">＋</span></summary><p>No. Radi escanea, explica y propone la operación completa — tú decides y tú la colocas en tu plataforma. Los cierres también los manejas tú; el sistema solo alerta.</p></details>
+      <details><summary>¿Necesito experiencia para empezar?<span aria-hidden="true">＋</span></summary><p>No: la app está pensada para principiantes e intermedios. La Biblioteca sigue tu curso por módulos y cada señal trae su «¿Por qué?» con la lección exacta, para que aprendas operando.</p></details>
+      <details><summary>¿Qué incluye la prueba de 14 días?<span aria-hidden="true">＋</span></summary><p>Acceso con 5 activos durante 14 días. Requiere tarjeta y recibes un aviso 3 días antes de que termine, para que decidas sin sorpresas.</p></details>
+      <details><summary>¿En qué se diferencian Premium y Élite?<span aria-hidden="true">＋</span></summary><p>Premium cubre 53 activos con señales 5m, radar de noticias, análisis dibujado y calculadora. Élite sube a 99 activos y suma multi-temporalidad, alertas prioritarias, diario de operaciones y backtests.</p></details>
+      <details><summary>¿Puedo hablar con Radi por voz?<span aria-hidden="true">＋</span></summary><p>Sí. El chat es constante y tiene voz con IA en vivo: lo que pides por texto o por voz se refleja en los paneles, y todo panel se refleja en el chat.</p></details>
+    </section>
+  </div>
+</div>
+
+<!-- ======= VIEW: PLANES ======= -->
+<div class="view" id="view-planes">
+  <div class="wrap">
+    <section class="blk" aria-labelledby="pl-h" style="padding-top:26px">
+      <div class="sec-head">
+        <span class="sec-tag tag-teal">Planes</span>
+        <h2 id="pl-h">Dos planes, sin letra pequeña</h2>
+        <p>Empieza con la prueba de 14 días y elige después. El plan anual ahorra el 20%.</p>
+      </div>
+      <div style="text-align:center">
+        <div class="billing-toggle" role="group" aria-label="Periodo de facturación">
+          <button id="billMonthly" aria-pressed="true">Mensual</button>
+          <button id="billAnnual" aria-pressed="false">Anual<span class="save">−20%</span></button>
+        </div>
+      </div>
+      <div class="plans">
+        <article class="plan">
+          <h3>Premium</h3>
+          <p class="price">$<span class="amt" data-m="29" data-a="276">29</span><small class="per-unit"> /mes</small></p>
+          <p class="per" data-m="Facturado cada mes" data-a="Facturado una vez al año ($23/mes)">Facturado cada mes</p>
+          <ul>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>53 activos</b> en el barrido</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Señales <b>5m LIMIT + STOP</b> con orden completa</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Radar de noticias</b> antes de que salgan</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Análisis <b>dibujado y croquis</b> de cada señal</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Calculadora</b> de riesgo</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Biblioteca completa del curso (Aprende)</span></li>
+          </ul>
+          <a class="btn btn-ghost" href="https://escaner-app-production-00fc.up.railway.app/client" target="_blank" rel="noopener">Empezar prueba de 14 días</a>
+        </article>
+        <article class="plan elite">
+          <span class="flag">El completo</span>
+          <h3>Élite</h3>
+          <p class="price">$<span class="amt" data-m="59" data-a="564">59</span><small class="per-unit"> /mes</small></p>
+          <p class="per" data-m="Facturado cada mes" data-a="Facturado una vez al año ($47/mes)">Facturado cada mes</p>
+          <ul>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>99 activos</b> — el universo completo</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Todo lo de Premium</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Análisis <b>multi-temporalidad</b> (multi-TF)</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Alertas prioritarias</b> de protección, cierre y giro</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Diario</b> de operaciones</span></li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9.5 18 20 6.5" stroke="#0B5C46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Backtests</b> para practicar el método</span></li>
+          </ul>
+          <a class="btn btn-teal" href="https://escaner-app-production-00fc.up.railway.app/client" target="_blank" rel="noopener">Empezar prueba de 14 días</a>
+        </article>
+      </div>
+      <div class="trial-note"><b>Prueba de 14 días gratis</b> con 5 activos — tarjeta obligatoria y aviso 3 días antes de que termine. Y si un amigo se suscribe por ti, <b>te ganas 1 mes gratis</b>.</div>
+    </section>
+
+    <div class="cta-band">
+      <h2>¿Dudas? Pregúntale a Radi en la app</h2>
+      <p>Entra con tu cuenta de cliente y pruébalo: el chat te enseña desde la primera señal.</p>
+      <a class="btn btn-sun" href="https://escaner-app-production-00fc.up.railway.app/client" target="_blank" rel="noopener">Entrar a la app</a>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-in">
+      <p><b style="color:var(--ink)">Escáner Opera y Aprende</b> — Aprende el método mientras el escáner vigila el mercado. El chat aconseja y propone; las decisiones y las órdenes son siempre tuyas.</p>
+      <p class="risk">Aviso de riesgo: operar en los mercados financieros conlleva un riesgo elevado, incluida la posible pérdida de parte o la totalidad del capital. Esta página y la app tienen fines educativos y de apoyo al análisis; no constituyen asesoría financiera ni garantía de resultados. La señal mostrada en esta página es un ejemplo con fines de enseñanza. Activos muy caros o volátiles (oro, plata, platino, paladio) solo se proponen cuando coinciden varios factores a la vez.</p>
+      <p>© 2026 · Escáner Opera y Aprende</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ======= BOTTOM TAB BAR (mobile) ======= -->
+<nav class="tabbar" aria-label="Menú principal">
+  <button data-nav="inicio" aria-current="page"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11.5 12 4l8 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 10.5V20h11v-9.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Inicio<span class="tab-dot"></span></button>
+  <button data-nav="escaner"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="3" fill="currentColor"/><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2" opacity=".55"/><circle cx="11" cy="11" r="10" stroke="currentColor" stroke-width="2" opacity=".3"/></svg>Escáner<span class="tab-dot"></span></button>
+  <button data-nav="aprende"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5C6 4 9 4 12 6c3-2 6-2 8-.5V19c-2-1.5-5-1.5-8 .5-3-2-6-2-8-.5V5.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 6v13.5" stroke="currentColor" stroke-width="2"/></svg>Aprende<span class="tab-dot"></span></button>
+  <button data-nav="metodo"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Método<span class="tab-dot"></span></button>
+  <button data-nav="planes"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 10.5h18" stroke="currentColor" stroke-width="2"/><path d="M7 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planes<span class="tab-dot"></span></button>
+</nav>
+
+<script>
+(function(){
+  "use strict";
+  /* ---------- Navigation (menus) ---------- */
+  var views = ["inicio","escaner","aprende","metodo","planes"];
+  function go(name, push){
+    if (views.indexOf(name) === -1) name = "inicio";
+    views.forEach(function(v){
+      document.getElementById("view-"+v).classList.toggle("active", v===name);
+    });
+    document.querySelectorAll("[data-nav]").forEach(function(el){
+      if (el.tagName === "BUTTON" && (el.closest(".topnav") || el.closest(".tabbar"))){
+        if (el.getAttribute("data-nav") === name) el.setAttribute("aria-current","page");
+        else el.removeAttribute("aria-current");
+      }
+    });
+    window.scrollTo({top:0, behavior:"auto"});
+    if (push !== false){
+      try { history.replaceState(null,"","#"+name); } catch(e){}
+    }
+  }
+  document.querySelectorAll("[data-nav]").forEach(function(el){
+    el.addEventListener("click", function(){ go(el.getAttribute("data-nav")); });
+  });
+  var start = (location.hash||"").replace("#","");
+  if (views.indexOf(start) > -1 && start !== "inicio") go(start, false);
+
+  /* ---------- Chat demo ---------- */
+  var answers = {
+    senal: "La Plata llegó al <b>borde superior del perfil</b> por tercera vez y rechazó con vela grande y volumen: en el extremo manda la oferta. La propuesta es un corto hacia el POC (TP1) y el VAL (TP2). Es la <b>lección 2.7 · Zonas de oferta y demanda</b>. Recuerda: es un ejemplo educativo y la decisión final es tuya.",
+    formacion: "«En formación» es la primera de las dos etapas: el precio se acerca al extremo y el escenario se está armando, pero <b>todavía no hay orden</b>. La entrada solo nace cuando llega la vela de confirmación con volumen. La disciplina aquí es esperar: la orden se deja lista en el nivel, no se persigue el precio.",
+    noticias: "El radar de noticias vigila el calendario <b>antes</b> de que los datos salgan. La regla es clara: en noticias de alta volatilidad no se entra — se opera antes (orden lista en el extremo) o después (con la reacción ya leída). Hoy el Crudo espera inventarios: por eso está en «espera».",
+    riesgo: "El tamaño nace del riesgo, no del impulso: define tu % por operación (la calculadora del escáner lo hace por ti), el stop va tras el nivel con holgura, y los objetivos salen solos: <b>TP1 = 1R en el POC, TP2 = 2R en el borde opuesto</b>. Al tocar TP1, la recomendación es cobrar.",
+    radar: "En el radar, cada activo tiene un estado: <b>formando</b> (se acerca al extremo), <b>lista</b> (gatillo confirmado con vela y volumen) o <b>espera</b> (noticia cerca o sin confirmación). Solo las «listas» llegan como propuesta de orden completa.",
+    saludo: "Hola. Pregúntame por una señal del radar, por qué algo está «en formación», por las noticias o por cuánto arriesgar. También puedo llevarte a una lección de la Biblioteca."
+  };
+  function radiAnswer(text){
+    var t = (text||"").toLowerCase();
+    if (/(hola|buenas|hey)/.test(t)) return answers.saludo;
+    if (/(plata|señal|senal|por ?qué|porque|por que)/.test(t)) return answers.senal;
+    if (/(formaci|formando|etapa)/.test(t)) return answers.formacion;
+    if (/(noticia|calendario|dato)/.test(t)) return answers.noticias;
+    if (/(riesgo|arriesg|cuánto|cuanto|stop|tamaño|tamano)/.test(t)) return answers.riesgo;
+    if (/(radar|oro|nasdaq|russell|crudo|activo)/.test(t)) return answers.radar;
+    return "Buena pregunta. En la app te respondo con el análisis completo y su dibujo. Aquí en la muestra puedo explicarte: <b>la señal de la Plata</b>, qué es estar <b>«en formación»</b>, las <b>noticias</b> del día o cómo se calcula el <b>riesgo</b>. Pruébame con uno de esos temas.";
+  }
+  var chatBody = document.getElementById("chatBody");
+  function addMsg(cls, html){
+    var d = document.createElement("div");
+    d.className = "msg " + cls; d.innerHTML = html;
+    chatBody.appendChild(d);
+    d.scrollIntoView({block:"nearest", behavior:"smooth"});
+  }
+  document.querySelectorAll("[data-ask]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var key = btn.getAttribute("data-ask");
+      var label = btn.querySelector("b") ? btn.textContent.trim() : btn.textContent.trim();
+      if (btn.classList.contains("radar-item")){
+        go("escaner");
+        addMsg("me", "Radi, explícame este activo del radar.");
+      }
+      setTimeout(function(){ addMsg("radi", answers[key] || answers.radar); }, btn.classList.contains("radar-item") ? 250 : 60);
+    });
+  });
+  document.getElementById("chatForm").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var inp = document.getElementById("chatInput");
+    var val = inp.value.trim();
+    if (!val) return;
+    addMsg("me", val.replace(/</g,"&lt;"));
+    inp.value = "";
+    setTimeout(function(){ addMsg("radi", radiAnswer(val)); }, 350);
+  });
+
+  /* ---------- Module tabs ---------- */
+  document.querySelectorAll(".mod-tabs [data-mod]").forEach(function(tab){
+    tab.addEventListener("click", function(){
+      document.querySelectorAll(".mod-tabs [data-mod]").forEach(function(t){ t.setAttribute("aria-selected","false"); });
+      tab.setAttribute("aria-selected","true");
+      document.querySelectorAll(".mod-panel").forEach(function(p){ p.classList.remove("active"); });
+      document.getElementById("mod-"+tab.getAttribute("data-mod")).classList.add("active");
+      document.getElementById("lessonNote").textContent = "";
+    });
+  });
+  document.querySelectorAll(".lesson").forEach(function(l){
+    l.addEventListener("click", function(){
+      var b = l.querySelector("b").textContent;
+      document.getElementById("lessonNote").textContent = "En la app, «" + b + "» se abre en video dentro de la Biblioteca — y cada señal relacionada te trae de vuelta a esta lección.";
+    });
+  });
+
+  /* ---------- Quiz ---------- */
+  var quiz = [
+    { q:"El precio toca por tercera vez el borde superior del Volume Profile y rechaza con volumen. ¿Qué se espera, la mayoría de las veces?",
+      opts:["Que siga subiendo sin parar","Que vaya hacia el otro lado","Que se quede quieto todo el día"], right:1,
+      fb:"Correcto. Si varios factores coinciden en el extremo, el precio va al otro lado la mayoría de las veces. Lección 2.7 y la regla del 3." },
+    { q:"Una figura preciosa de 5 minutos aparece CONTRA la tendencia mayor de 4H. ¿Qué hace el escáner?",
+      opts:["La entrega igual: la figura manda","La descarta: la tendencia mayor manda","Duplica el tamaño para compensar"], right:1,
+      fb:"Correcto: los complementos ajustan la entrada, pero nunca crean una dirección contra la tendencia mayor." },
+    { q:"Tu posición llega a mitad de camino al objetivo (+1R). ¿Qué recomienda Radi?",
+      opts:["Aguantar sin tocar nada","Poner el stop en cero (breakeven)","Cerrar todo con pérdida"], right:1,
+      fb:"Correcto: a +1R se protege — stop en la entrada y la operación ya no puede perder. Y al tocar TP1, la recomendación es cobrar." }
+  ];
+  var qi = 0, score = 0, locked = false;
+  var qEl = document.getElementById("quizQ"), oEl = document.getElementById("quizOpts"),
+      fEl = document.getElementById("quizFb"), sEl = document.getElementById("quizStep");
+  function renderQuiz(){
+    locked = false;
+    sEl.textContent = "Comprobación · " + (qi+1) + " de " + quiz.length + (qi===0 && score===0 ? "" : " · aciertos: " + score);
+    qEl.textContent = quiz[qi].q;
+    fEl.textContent = "";
+    oEl.innerHTML = "";
+    quiz[qi].opts.forEach(function(opt, i){
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = opt;
+      b.addEventListener("click", function(){
+        if (locked) return; locked = true;
+        if (i === quiz[qi].right){ b.classList.add("right"); score++; fEl.textContent = quiz[qi].fb; }
+        else { b.classList.add("wrong"); oEl.children[quiz[qi].right].classList.add("right"); fEl.textContent = "No es esa — la correcta es la marcada en verde. " + quiz[qi].fb; }
+        setTimeout(function(){
+          qi++;
+          if (qi < quiz.length) renderQuiz();
+          else {
+            sEl.textContent = "Comprobación completada";
+            qEl.textContent = "Resultado: " + score + " de " + quiz.length + " aciertos.";
+            oEl.innerHTML = "";
+            var again = document.createElement("button");
+            again.type = "button"; again.textContent = "Repetir la comprobación";
+            again.addEventListener("click", function(){ qi = 0; score = 0; renderQuiz(); });
+            oEl.appendChild(again);
+            fEl.textContent = score === 3 ? "Perfecto: ya lees el mercado como el método manda." : "Buen comienzo — en la Biblioteca cada respuesta tiene su lección en video.";
+          }
+        }, 2100);
+      });
+      oEl.appendChild(b);
+    });
+  }
+  renderQuiz();
+
+  /* ---------- Risk calculator ---------- */
+  function fmt(n, d){ return n.toLocaleString("en-US",{minimumFractionDigits:d, maximumFractionDigits:d}); }
+  function calc(){
+    var cap = parseFloat(document.getElementById("cCapital").value) || 0;
+    var pct = parseFloat(document.getElementById("cRisk").value) || 0;
+    var en  = parseFloat(document.getElementById("cEntry").value) || 0;
+    var st  = parseFloat(document.getElementById("cStop").value) || 0;
+    var risk = cap * pct / 100;
+    var dist = Math.abs(en - st);
+    document.getElementById("oRisk").textContent = "$" + fmt(risk,2);
+    document.getElementById("oDist").textContent = fmt(dist,3) + " pts";
+    document.getElementById("oSize").textContent = dist > 0 ? fmt(risk/dist,1) : "—";
+    document.getElementById("oTp1").textContent = "$" + fmt(risk,2);
+    document.getElementById("oTp2").textContent = "$" + fmt(risk*2,2);
+  }
+  ["cCapital","cRisk","cEntry","cStop"].forEach(function(id){
+    document.getElementById(id).addEventListener("input", calc);
+  });
+  calc();
+
+  /* ---------- Billing toggle ---------- */
+  var bm = document.getElementById("billMonthly"), ba = document.getElementById("billAnnual");
+  function setBilling(annual){
+    bm.setAttribute("aria-pressed", String(!annual));
+    ba.setAttribute("aria-pressed", String(annual));
+    document.querySelectorAll(".plan .amt").forEach(function(el){
+      el.textContent = annual ? el.getAttribute("data-a") : el.getAttribute("data-m");
+    });
+    document.querySelectorAll(".plan .per-unit").forEach(function(el){
+      el.textContent = annual ? " /año" : " /mes";
+    });
+    document.querySelectorAll(".plan .per").forEach(function(el){
+      el.textContent = annual ? el.getAttribute("data-a") : el.getAttribute("data-m");
+    });
+  }
+  bm.addEventListener("click", function(){ setBilling(false); });
+  ba.addEventListener("click", function(){ setBilling(true); });
+})();
+</script>
+</body>
+</html>
